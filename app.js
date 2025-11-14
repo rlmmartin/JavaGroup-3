@@ -19,9 +19,7 @@ class Task {
 
   // this will show task details 
   showDetails() {
-    console.log(
-      `Task: ${this.name}, Priority: ${this.priority}, Deadline: ${this.deadline}`
-    );
+    console.log(`Task: ${this.name}, Priority: ${this.priority}, Deadline: ${this.deadline}`);
   }
 }
 

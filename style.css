@@ -50,6 +50,18 @@ form {
   margin: 0 auto;              /* centers the form inside the container */
 }
 
+/*list after getting inputs*/
+#task-list li {
+  list-style-type: none;
+}
+#task-list li span {
+  margin-left: 40px;
+  cursor: pointer;
+}
+/*Complete button*/
+complete-btn{
+  margin-left: 10px;
+}
 /* for the footer styling */
 footer {
   background-color: #030303;   
