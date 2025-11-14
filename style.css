@@ -1,0 +1,61 @@
+/* this is for the outer border wrapper around the whole webpage */
+.page-container {
+  border: 5px solid #1b1b1b; 
+  max-width: 1000px;         
+  margin: 20px auto;        
+  background-color: white;   
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* for the body styling */
+body {
+  margin: 0;                           
+  padding: 0;                           
+  background-color: #e6e6e6;           
+  font-family: Helvetica, Arial, sans-serif;
+  text-align: center;                   /* ensures headings and text stay centered */
+}
+
+/* relates to every single thing in the header section */
+header {
+  background-color: #c5c5c5e8;          
+  padding: 20px;                        
+  box-sizing: border-box;               
+  margin: 0;
+  text-align: center;
+}
+
+header h1 {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+header p {
+  margin-bottom: 10px;
+}
+
+header button {
+  margin-top: 10px;
+}
+
+/* for the form layout */
+form {
+  display: flex;               
+  flex-direction: column;      /* this stacks all form elements vertically */
+  align-items: flex-start;     
+  gap: 8px;                    
+  width: 100%;                 
+  max-width: 350px;            
+  margin: 0 auto;              /* centers the form inside the container */
+}
+
+/* for the footer styling */
+footer {
+  background-color: #030303;   
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;            /* for the space above footer */
+}
+

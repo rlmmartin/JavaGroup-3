@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAVP Task Manager Application!</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+  <!-- this makes the entire webpage wrapped inside this border container -->
+  <div class="page-container">
+
+    <!-- relates to everysingle thing in the header section -->
+    <header>
+      <h1>RAVP Task Manager Application!</h1>
+      <p>
+        Tired of having all of your important assignment deadlines, descriptions, and priorities all over the place?
+        Look no further! Our Task Manager application will get you right back on track! Alive and Kicking!
+      </p>
+      <button id="theme-toggle">Want a change of atmosphere?</button>
+    </header>
+
+    <main id="main-content">
+
+      <section id="task-form-section">
+        <h2>To add a brand new Task</h2>
+        <p>Just fill out the boxes below!</p>
+
+        <form id="task-form">
+          <label for="task-name">Task Name:</label>
+          <input
+            type="text"
+            id="task-name"
+            placeholder="Name of your Task"
+            required
+            autocomplete="off"
+            title="Enter the name of your task"
+          />
+
+          <label for="task-desc">Description:</label>
+          <input
+            type="text"
+            id="task-desc"
+            placeholder="Description of your task"
+            required
+            autocomplete="off"
+            title="Enter a short description of your task"
+          />
+
+          <label for="task-priority">Priority level:</label>
+          <select id="task-priority" required title="Select how urgent this task is">
+            <option value="">Select the Priority</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+
+          <label for="task-deadline">The deadline:</label>
+          <input
+            type="date"
+            id="task-deadline"
+            required
+            autocomplete="off"
+            title="Choose the deadline for this task"
+          />
+
+          <button type="submit">Add my task please!</button>
+        </form>
+      </section>
+
+      <section id="task-list-section">
+        <h2>Your current active Tasks</h2>
+        <div id="task-list">
+          <!-- the tasks that the user makes  will be rendered here -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer bar  -->
+    <footer id="footer">
+      <p>&copy; 2025 RAVP Task Manager</p>
+    </footer>
+
+  </div> <!-- end of .page-container -->
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
