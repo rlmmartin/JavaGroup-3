@@ -59,7 +59,7 @@ form {
   cursor: pointer;
 }
 /*Complete button*/
-complete-btn{
+.complete-btn{
   margin-left: 10px;
 }
 /* for the footer styling */

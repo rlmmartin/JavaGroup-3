@@ -1,5 +1,13 @@
-import { Task, TimedTask} from './app.js';
-let tasks = [];
+import { Task, TimedTask } from './app.js';
+import { saveTasksDummy, loadTasksDummy } from './storage.js';    // <-- added
+import { requestNotificationPermission, fetchQuote } from "./timers.js";   // <-- added
+
+requestNotificationPermission();   // <-- added
+fetchQuote(); // <-- added
+// Load saved tasks
+let tasks = loadTasksDummy();           // <-- added
+window.tasks = tasks;              // <-- added
+
 //add task
 function addTask(e) {
     e.preventDefault();
@@ -10,9 +18,12 @@ function addTask(e) {
     let deadline = document.getElementById('task-deadline').value;
 
     let task = new Task(name, description, priority, deadline);
-    tasks.push(task); //adding tasks to the arrays
+    tasks.push(task); 
+    saveTasks(tasks);              // <-- added
+
     console.log("New task added:", task); 
-    task.showDetails(); //use showDetails in class
+    task.showDetails();
+
     //Adding to list
     let taskContainer = document.getElementById('task-list');
     let li = document.createElement('li');
@@ -31,11 +42,21 @@ function addTask(e) {
             e.target.parentElement.style.textDecoration = 'line-through';
             e.target.disabled = true;
             e.target.textContent = 'Completed!';
-        } else if (e.target.tagName === 'SPAN'){    //Delete when hit the cross
-            e.target.parentElement.remove();
+
+        } else if (e.target.tagName === 'SPAN'){    
+            // DELETE FROM PAGE & SAVE CHANGES (new code)
+            e.target.parentElement.remove();   // <-- changed
+            
+            let deletedTaskName = e.target.parentElement.textContent
+                .split(" - ")[0]
+                .replace("Task: ", "");        // <-- added
+            
+            tasks = tasks.filter(t => t.name !== deletedTaskName);   // <-- added
+            saveTasks(tasks);                  // <-- added
         }
     }, false);
-    document.getElementById('task-form').reset(); //reset input after submitting
+
+    document.getElementById('task-form').reset(); 
 
     //Complete button 
     let completeBtn = document.createElement('button');
@@ -44,14 +65,16 @@ function addTask(e) {
     li.appendChild(completeBtn);
     return task;
 }
+
 let taskForm = document.getElementById('task-form');
 taskForm.addEventListener('submit', addTask);
 
 //complete task
 function completeTask(index){
     let task = tasks[index];
-    task.markAsDone(); //using markAsDone in class
+    task.markAsDone(); 
     console.log("Task completed: ", task.name);
+    saveTasks(tasks);              // <-- added
 }
 
 //countdown 
@@ -65,8 +88,8 @@ function countDown(){
 
 //display 
 function displayTasks(){
-    console.log("Current tasks: ", tasks.map(tasks => tasks.name).join(", "));
+    console.log("Current tasks: ", tasks.map(t => t.name).join(", "));
 }
 
 displayTasks();
-export { addTask, completeTask, countDown }
+export { addTask, completeTask, countDown };
