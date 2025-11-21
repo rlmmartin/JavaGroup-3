@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  <script type="module" src="JavaGroup-3/script.js"></script>
 
   <!-- this makes the entire webpage wrapped inside this border container -->
   <div class="page-container">
@@ -68,15 +67,15 @@
             title="Choose the deadline for this task"
           />
 
-          <button type="submit" onclick="addTask()">Add my task please!</button>
+          <button type="submit">Add my task please!</button>
         </form>
       </section>
 
       <section id="task-list-section">
         <h2>Your current active Tasks</h2>
-        <div id="task-list">
-          <!-- the tasks that the user makes  will be rendered here -->
-        </div>
+        <ul id="task-list" aria-live="polite">
+          <!-- the tasks that the user makes will be rendered here as li elements -->
+        </ul>
       </section>
 
     </main>
@@ -88,6 +87,7 @@
 
   </div> <!-- end of .page-container -->
 
+  <!-- single module import () -->
   <script type="module" src="script.js"></script>
 </body>
 </html>

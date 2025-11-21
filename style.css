@@ -1,73 +1,142 @@
-/* this is for the outer border wrapper around the whole webpage */
+/* PAGE CONTAINER */
 .page-container {
-  border: 5px solid #1b1b1b; 
-  max-width: 1000px;         
-  margin: 20px auto;        
-  background-color: white;   
+  border: 4px solid #1b1b1b;
+  max-width: 900px;
+  margin: 20px auto;
+  background: #ffffff;
   box-sizing: border-box;
   padding: 0;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #cccccc;
 }
 
-/* for the body styling */
+/* BODY  */
 body {
-  margin: 0;                           
-  padding: 0;                           
-  background-color: #e6e6e6;           
+  margin: 0;
+  padding: 0;
+  background: #f3f3f3;
   font-family: Helvetica, Arial, sans-serif;
-  text-align: center;                   /* ensures headings and text stay centered */
+  text-align: center;
 }
 
-/* relates to every single thing in the header section */
+/* HEADER  */
 header {
-  background-color: #c5c5c5e8;          
-  padding: 20px;                        
-  box-sizing: border-box;               
-  margin: 0;
-  text-align: center;
+  background: #fe7902;
+  padding: 25px;
+  color: #1b1b1b;
+  border-bottom: 4px solid #f6042e;
 }
 
 header h1 {
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-header p {
-  margin-bottom: 10px;
+  margin: 5px 0 10px;
 }
 
 header button {
-  margin-top: 10px;
-}
-
-/* for the form layout */
-form {
-  display: flex;               
-  flex-direction: column;      /* this stacks all form elements vertically */
-  align-items: flex-start;     
-  gap: 8px;                    
-  width: 100%;                 
-  max-width: 350px;            
-  margin: 0 auto;              /* centers the form inside the container */
-}
-
-/*list after getting inputs*/
-#task-list li {
-  list-style-type: none;
-}
-#task-list li span {
-  margin-left: 40px;
+  padding: 10px 16px;
+  background: #f6042e;
+  color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
-/*Complete button*/
-.complete-btn{
-  margin-left: 10px;
+header button:hover {
+  background: #d50327;
 }
-/* for the footer styling */
-footer {
-  background-color: #030303;   
+
+/*  FORM  */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  max-width: 350px;
+  margin: 20px auto;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #ffae2e;
+  border-radius: 5px;
+}
+
+form button {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #f6042e;
   color: white;
-  text-align: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+form button:hover {
+  background: #d50327;
+}
+
+/*  */
+form > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* TASK LIST  */
+#task-list {
+  padding: 0;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+#task-list li {
+  list-style: none;
+  background: #ffffff;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border: 2px solid #ffae2e;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* MAIN TEXT */
+.task-main strong {
+  color: #f6042e;
+  font-size: 18px;
+}
+
+.task-meta {
+  font-size: 14px;
+  color: #555;
+}
+
+/* ACTION BUTTONS */
+.complete-btn {
+  background: #ffae2e;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.complete-btn:hover {
+  background: #f79b00;
+}
+
+.delete-btn {
+  color: #f6042e;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+/* FOOTER */
+footer {
+  background: #1b1b1b;
+  color: white;
   padding: 20px;
-  margin-top: 30px;            /* for the space above footer */
+  margin-top: 30px;
 }
 

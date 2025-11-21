@@ -4,10 +4,11 @@
 
 // Main Task class
 class Task {
-  constructor(name, description, priority, deadline) {
+  constructor(name, description, priority, deadline, id = crypto.randomUUID()) { // default id added - changed by Raymond
+    this.id = id; // unique identifier added — changed by Raymond
     this.name = name; // name of the task
     this.description = description; // short description of the task
-    this.priority = priority; 
+    this.priority = priority;
     this.deadline = deadline; // deadline date of the task
     this.completed = false; // it will start as not done
   }
@@ -25,8 +26,8 @@ class Task {
 
 // Subclass for TimedTask
 class TimedTask extends Task {
-  constructor(name, description, priority, deadline, timeLeft) {
-    super(name, description, priority, deadline);
+  constructor(name, description, priority, deadline, timeLeft, id) { // id param added - changed by Raymond
+    super(name, description, priority, deadline, id); // pass id to base class - changed by Raymond
     this.timeLeft = timeLeft; // this will show how much time is remaining for the task
   }
 
@@ -39,3 +40,8 @@ class TimedTask extends Task {
 
 // Export the classes in other files
 export { Task, TimedTask };
+
+
+
+// NOV 20th Changes by Raymond after a review
+// Added a unique id to Task and passed it through TimedTask to ensure reliable UI mapping and storage - changed by Raymond.
