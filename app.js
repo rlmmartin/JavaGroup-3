@@ -11,6 +11,8 @@ class Task {
     this.priority = priority;
     this.deadline = deadline; // deadline date of the task
     this.completed = false; // it will start as not done
+    this.isUrgent = false;  // Vu added
+    this.timeLeft = 0;  // Vu added
   }
 
   // this will mark the task as completed
@@ -29,6 +31,7 @@ class TimedTask extends Task {
   constructor(name, description, priority, deadline, timeLeft, id) { // id param added - changed by Raymond
     super(name, description, priority, deadline, id); // pass id to base class - changed by Raymond
     this.timeLeft = timeLeft; // this will show how much time is remaining for the task
+    this.isUrgent = false;  // Vu added
   }
 
   // Countdown method 
