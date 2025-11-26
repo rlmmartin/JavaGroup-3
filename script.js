@@ -1,9 +1,11 @@
 import { Task, TimedTask } from './app.js';
-import { saveTasks, loadTasks } from './storage.js'; // replace dummy storage — added by Raymond
-import { requestNotificationPermission, fetchQuote } from "./timers.js";   // <-- added
+import { saveTasks, loadTasks } from './storage.js';
+import { requestNotificationPermission, fetchQuote } from "./timers.js";
+import { updateStreak } from "./storage.js"; // Pietro added
+import { checkRewards } from "./app.js"; // Pietro added
 
-requestNotificationPermission();   // <-- added
-fetchQuote(); // <-- added
+requestNotificationPermission();
+fetchQuote();
 
 
 //Callbacks
@@ -42,29 +44,16 @@ function addTask(e) {
     try {
       task = new TimedTask(name, description, priority, deadline); // construct Task safely — added by Raymond
     } catch (err) {
-      console.error('Task constructor failed:', err); // surface constructor errors — added by Raymond
       return;
     }
 
     tasks.push(task);
-    saveTasks(tasks);              // <-- added - use real save - added by Raymond
-
-    console.log("New task added:", task);
-    if (typeof task.showDetails === 'function') task.showDetails();
-
-    //Adding to list
-    // moved to renderTasks() - added by Raymond
-
-    //Delete task
-    // handled by delegated listener - added by Raymond
+    saveTasks(tasks);
 
     document.getElementById('task-form').reset();
-    document.getElementById('task-name').focus(); // focus for quick entry - added by Raymond
+    document.getElementById('task-name').focus();
 
-    //Complete button
-    // handled by delegated listener - added by Raymond
-
-    renderTasks(); // re-render list - added by Raymond
+    renderTasks();
     return task;
 }
 
@@ -73,33 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const taskForm = document.getElementById('task-form');
   if (taskForm && !taskForm._hasSubmitListener) {
     taskForm.addEventListener('submit', addTask);
-    taskForm._hasSubmitListener = true; // prevent duplicate attachments - added by Raymond
-  } else if (!taskForm) {
-    console.error('No #task-form found in DOM'); // debug guard - added by Raymond
+    taskForm._hasSubmitListener = true;
   }
-  //render filter/sort <-- Vu added
-  let sortBy = document.getElementById('sort-by');
-  let filterPriority = document.getElementById('filter-priority');
-  let filterStatus = document.getElementById('filter-status');
-  let clear = document.getElementById('clear');
-  if (sortBy){
-    sortBy.addEventListener('change', SortAndFilter);
-  }
-  if (filterPriority){
-    filterPriority.addEventListener('change', SortAndFilter);
-  }
-  if (filterStatus){
-    filterStatus.addEventListener('change', SortAndFilter);
-  }
-  if(clear){
-    clear.addEventListener('click', ()=>{
-      document.getElementById('sort-by').value = '';
-      document.getElementById('filter-priority').value = '';
-      document.getElementById('filter-status').value = '';
-      renderTasks();
-    });
-  }
-  // initial paint after DOM ready - added by Raymond
+
   startTimer();
   renderTasks();
 });
@@ -109,22 +74,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function completeTask(index){
     let task = tasks[index];
     if (!task) return;
-    if (typeof task.markAsDone === 'function') {
-      task.markAsDone();
-    } else {
-      task.completed = true;
-    }
-    console.log("Task completed: ", task.name);
-    saveTasks(tasks);              // <-- added - use real save -- added by Raymond
+    if (typeof task.markAsDone === 'function') task.markAsDone();
+    else task.completed = true;
+    saveTasks(tasks);
 }
 
 //Timers path:
 //countdown
 function countDown(){
     tasks.forEach(task =>{
-        if(task instanceof TimedTask) {
-            task.startTimer();
-        }
+        if(task instanceof TimedTask) task.startTimer();
     });
 }
 
@@ -152,7 +111,7 @@ function updateTimer(){        // Vu added
 
       //Set to end of the day 23:59:59
       deadlineDate.setHours(23, 59, 59, 999);
-      task.timeLeft = deadlineDate.getTime() - Date.now(); //Calculate time left
+      task.timeLeft = deadlineDate.getTime() - Date.now();
 
       //prepare for emittion
       let wasUrgent = oldTimeLeft <= 3 * 60 * 60 * 1000 && task.timeLeft > 0; 
@@ -161,7 +120,7 @@ function updateTimer(){        // Vu added
         emitCallback('onUrgent', task);
       }
       task.isUrgent = true;
-    }  else {
+    } else {
       task.isUrgent = false;
     }
   });
@@ -175,12 +134,9 @@ displayTasks();
 
 // central render function - added by Raymond
 function renderTasks() {
-    const taskContainer = document.getElementById('task-list'); // reuse container - added by Raymond
-    if (!taskContainer) {
-      console.error('No #task-list found'); // guard - added by Raymond
-      return;
-    }
-    taskContainer.innerHTML = ''; // clear before render - added by Raymond
+    const taskContainer = document.getElementById('task-list');
+    if (!taskContainer) return;
+    taskContainer.innerHTML = '';
 
     if (!Array.isArray(tasks) || tasks.length === 0) {
       const li = document.createElement('li');
@@ -200,8 +156,9 @@ function renderTasks() {
         //Calculate time left
         let timeDisplay = document.createElement('div');
         timeDisplay.className = 'time-display';
+
         if(task.timeLeft > 0){
-          let day = Math.floor(task.timeLeft / (1000 * 60 * 60 * 24))
+          let day = Math.floor(task.timeLeft / (1000 * 60 * 60 * 24));
           let hour = Math.floor(task.timeLeft % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
           let minute = Math.floor((task.timeLeft % (1000 * 60 * 60)) / (1000 * 60));
           let second = Math.floor((task.timeLeft % (1000 * 60)) / 1000);
@@ -271,30 +228,31 @@ document.addEventListener('click', function(e){
     const withinList = e.target.closest && e.target.closest('#task-list');
     if (!withinList) return;
 
-    const li = e.target.closest('li'); // find item - added by Raymond
-    if (!li) return; // guard - added by Raymond
-    const id = li.dataset.id; // read id - added by Raymond
-    const idx = tasks.findIndex(t => t.id === id); // locate task - added by Raymond
-    if (idx === -1) return; // guard - added by Raymond
+    const li = e.target.closest('li');
+    if (!li) return;
+    const id = li.dataset.id;
+    const idx = tasks.findIndex(t => t.id === id);
+    if (idx === -1) return;
 
-    //complete task when hit the complete button
-    if(e.target.classList.contains('complete-btn')) { // robust class check - added by Raymond
-        if (typeof tasks[idx].markAsDone === 'function') tasks[idx].markAsDone(); // update model - added by Raymond
+    if(e.target.classList.contains('complete-btn')) {
+        if (typeof tasks[idx].markAsDone === 'function') tasks[idx].markAsDone();
         else tasks[idx].completed = true;
-        saveTasks(tasks); // persist - added by Raymond
-        renderTasks(); // refresh UI - added by Raymond
-        return; // stop - added by Raymond
+
+        updateStreak(); // Pietro added: updates streak when completing task
+        checkRewards(); // Pietro added: checks reward on task complete
+
+        saveTasks(tasks);
+        renderTasks();
+        return;
     }
 
-    // DELETE FROM PAGE & SAVE CHANGES (new code)
-    if (e.target.classList.contains('delete-btn')) { // specific class - added by Raymond
-        tasks.splice(idx, 1); // remove from array - added by Raymond
-        saveTasks(tasks); // persist - added by Raymond
-        renderTasks(); // refresh UI - added by Raymond
+    if (e.target.classList.contains('delete-btn')) {
+        tasks.splice(idx, 1);
+        saveTasks(tasks);
+        renderTasks();
     }
 }, false);
 
-// initial paint (in case DOMContentLoaded already fired) - added by Raymond
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   renderTasks();
 }
@@ -308,7 +266,7 @@ function sortTask(tasks, sort){
       return sortedTask.sort((a, b)=>{
         const taskA = new Date(a.deadline);
         const taskB = new Date(b.deadline);
-        return taskA - taskB; // if taskA - taskB = negative => taskA came first and vice versa 
+        return taskA - taskB;
       });
 
     case 'priority':
@@ -316,7 +274,7 @@ function sortTask(tasks, sort){
       return sortedTask.sort((a, b)=>{
         return (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0);
       });
-  
+
     default:
       return sortedTask;
   }
@@ -329,7 +287,6 @@ function filterTask(tasksFilter, filterPriority, filterStatus){
     }
     if(filterStatus === 'completed' && !task.completed) return false;
     if(filterStatus === 'active' && task.completed) return false;
-
     return true;
   });
 }
@@ -341,7 +298,7 @@ function SortAndFilter(){
 
   //Using sort/filter
   let filteredTask = filterTask(tasks, filterPriority, filterStatus); 
-  let SortandFilter =sortTask(filteredTask, sortBy);
+  let SortandFilter = sortTask(filteredTask, sortBy);
   renderFilter(SortandFilter);
 }
 
@@ -355,15 +312,14 @@ function renderFilter(filtered){
     return;
   }
 
-  //Render each tasks
   filtered.forEach(task =>{
     let li = document.createElement('li');
     li.dataset.id = task.id;
 
     if(task.isUrgent){
-    li.classList.add('urgent-task');
-  }
-  //Copied from renderTask()
+      li.classList.add('urgent-task');
+    }
+
     let timeDisplay = document.createElement('div');
     timeDisplay.className = 'time-display';
     if(task.timeLeft > 0){
@@ -377,7 +333,7 @@ function renderFilter(filtered){
         timeDisplay.innerHTML = `${hour}h ${minute}m ${second}s`;
       }
     }
-    //Display
+
     if(task.isUrgent){
       timeDisplay.classList.add('urgent-time');
     } else if(task.timeLeft <= 0 && !task.completed){
@@ -430,8 +386,8 @@ function renderFilter(filtered){
     taskContainer.appendChild(li);
   });
 }
-export { addTask, completeTask, countDown };
 
+export { addTask, completeTask, countDown };
 // NOV 20th Changes and modifications by Raymond
 // Approximately 35% of script.js was altered (rough estimate based on additions, replacements, and moved logic).
 // Added a single delegated click handler, id-based DOM binding, a central renderTasks function, real save/load calls, initial render on load, and minimal input validation to ensure reliable add/complete/delete behavior and persistence — changed by Raymond

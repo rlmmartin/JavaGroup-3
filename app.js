@@ -4,23 +4,21 @@
 
 // Main Task class
 class Task {
-  constructor(name, description, priority, deadline, id = crypto.randomUUID()) { // default id added - changed by Raymond
-    this.id = id; // unique identifier added — changed by Raymond
-    this.name = name; // name of the task
-    this.description = description; // short description of the task
+  constructor(name, description, priority, deadline, id = crypto.randomUUID()) { 
+    this.id = id; 
+    this.name = name; 
+    this.description = description; 
     this.priority = priority;
-    this.deadline = deadline; // deadline date of the task
-    this.completed = false; // it will start as not done
-    this.isUrgent = false;  // Vu added
-    this.timeLeft = 0;  // Vu added
+    this.deadline = deadline; 
+    this.completed = false; 
+    this.isUrgent = false;  
+    this.timeLeft = 0;  
   }
 
-  // this will mark the task as completed
   markAsDone() {
     this.completed = true;
   }
 
-  // this will show task details 
   showDetails() {
     console.log(`Task: ${this.name}, Priority: ${this.priority}, Deadline: ${this.deadline}`);
   }
@@ -28,23 +26,35 @@ class Task {
 
 // Subclass for TimedTask
 class TimedTask extends Task {
-  constructor(name, description, priority, deadline, timeLeft, id) { // id param added - changed by Raymond
-    super(name, description, priority, deadline, id); // pass id to base class - changed by Raymond
-    this.timeLeft = timeLeft; // this will show how much time is remaining for the task
-    this.isUrgent = false;  // Vu added
+  constructor(name, description, priority, deadline, timeLeft, id) { 
+    super(name, description, priority, deadline, id);
+    this.timeLeft = timeLeft; 
+    this.isUrgent = false; 
   }
 
-  // Countdown method 
   startCountdown() {
     console.log(`Countdown started for task: ${this.name}`);
-    // Later this will be connected with timers.js
   }
 }
 
-// Export the classes in other files
+// Export classes
 export { Task, TimedTask };
 
+import { getStreakData } from "./storage.js"; // Pietro added: import streak data
 
+export function checkRewards() { // Pietro added: checks if user earns reward
+    const streak = getStreakData(); 
+    if (streak.streakCount === 7) {
+        grantReward("Seven day streak badge"); // Pietro added: reward rule
+    }
+}
 
-// NOV 20th Changes by Raymond after a review
-// Added a unique id to Task and passed it through TimedTask to ensure reliable UI mapping and storage - changed by Raymond.
+function grantReward(rewardName) { // Pietro added: stores earned badge in localStorage
+    let rewards = JSON.parse(localStorage.getItem("rewardList")) || [];
+    if (rewards.includes(rewardName)) return;
+    rewards.push(rewardName);
+    localStorage.setItem("rewardList", JSON.stringify(rewards));
+}
+
+// NOV 20th Changes by Raymond
+// nov 26, changes by pietro. moved around some stuff and changed some lines for all work. idk if its good but do what u like lol
