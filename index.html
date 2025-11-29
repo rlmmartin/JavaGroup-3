@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RAVP Task Manager Application!</title>
+  <!-- link to our CSS file for styling -->
   <link rel="stylesheet" href="style.css" />
+  <!-- favicon for the browser tab -->
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 
@@ -13,29 +15,37 @@
   <!-- this makes the entire webpage wrapped inside this border container -->
   <div class="page-container">
 
-    <!-- relates to everysingle thing in the header section -->
+    <!-- header section: title, intro text, and theme toggle button -->
     <header>
       <h1>RAVP Task Manager Application!</h1>
       <p>
         Tired of having all of your important assignment deadlines, descriptions, and priorities all over the place?
         Look no further! Our Task Manager application will get you right back on track! Alive and Kicking!
       </p>
-      <button id="theme-toggle">Want a change of atmosphere?</button>
+      <button id="theme-toggle" aria-pressed="false">Want a change of atmosphere?</button>
     </header>
 
+    <!-- main content area -->
     <main id="main-content">
 
+      <!-- streak display section -->
+      <section id="streak-section">
+        <h2>Your streak</h2>
+        <div id="streak-display">Streak: 0 days</div>
+      </section>
+
+      <!-- form section for adding new tasks -->
       <section id="task-form-section">
         <h2>To add a brand new Task</h2>
         <p>Just fill out the boxes below!</p>
 
-        <form id="task-form">
+        <!-- disable native validation so custom JS runs -->
+        <form id="task-form" novalidate>
           <label for="task-name">Task Name:</label>
           <input
             type="text"
             id="task-name"
             placeholder="Name of your Task"
-            required
             autocomplete="off"
             title="Enter the name of your task"
           />
@@ -45,13 +55,12 @@
             type="text"
             id="task-desc"
             placeholder="Description of your task"
-            required
             autocomplete="off"
             title="Enter a short description of your task"
           />
 
           <label for="task-priority">Priority level:</label>
-          <select id="task-priority" required title="Select how urgent this task is">
+          <select id="task-priority" title="Select how urgent this task is">
             <option value="">Select the Priority</option>
             <option value="High">High</option>
             <option value="Medium">Medium</option>
@@ -62,7 +71,6 @@
           <input
             type="date"
             id="task-deadline"
-            required
             autocomplete="off"
             title="Choose the deadline for this task"
           />
@@ -71,6 +79,7 @@
         </form>
       </section>
 
+      <!-- section where tasks will be listed -->
       <section id="task-list-section">
         <h2>Your current active Tasks</h2>
         <ul id="task-list" aria-live="polite">
@@ -78,8 +87,9 @@
         </ul>
       </section>
 
-      <section id="control">
-        <label for="sort">Sort by:</label>
+      <!-- sorting and filtering controls -->
+      <section class="control">
+        <label for="sort-by">Sort by:</label>
         <select id="sort-by">
           <option value="">Default</option>
           <option value="deadline">Deadline</option>
@@ -87,7 +97,7 @@
         </select>
       </section>
 
-      <section id="control">
+      <section class="control">
         <label for="filter-priority">Filter:</label>
         <select id="filter-priority">
           <option value="">All priorities</option>
@@ -97,8 +107,8 @@
         </select>
       </section>
 
-      <section id="control">
-        <label for="filter-status"></label>
+      <section class="control">
+        <label for="filter-status">Status:</label>
         <select id="filter-status">
           <option value="">All status</option>
           <option value="active">Active</option>
@@ -106,17 +116,34 @@
         </select>
       </section>
 
+      <!-- clear button to reset filters or tasks -->
       <button id="clear">Clear</button>
     </main>
 
-    <!-- Footer bar  -->
+    <!-- Footer bar -->
     <footer id="footer">
       <p>&copy; 2025 RAVP Task Manager</p>
     </footer>
 
   </div> <!-- end of .page-container -->
 
-  <!-- single module import () -->
+  <!-- Confetti library for celebration effects -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- main script file -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
+
+
+
+<!-- --- Summary for this file ---
+This index.html file ties everything together for our Week 1–2 requirements:
+- It sets up the structure with semantic HTML elements (header, main, section, footer).
+- It provides form inputs and labels for tasks, showing DOM elements that JavaScript will manipulate.
+- It includes buttons and selects that connect to event listeners in our scripts.
+- It links external CSS and JS modules, showing modular organization.
+- It uses accessibility features like aria-live and proper labels.
+Altogether, this file is the foundation of our app, giving the DOM structure that our JavaScript
+modules interact with to meet the objectives for event handling, DOM manipulation, and modular design. -->
+
